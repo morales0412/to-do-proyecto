@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Lista de tareas | To-Do Sprint{% endblock %}
+
+{% block content %}
+<section class="todo-panel" data-animate>
+	<div class="panel-header">
+		<p class="eyebrow">Panel de tareas</p>
+		<h1>Tu lista de pendientes</h1>
+		<p class="panel-subtitle">Mantiene el foco en lo importante y avanza paso a paso.</p>
+	</div>
+
+	{% if tasks %}
+	<ul class="task-grid" aria-label="Lista de tareas">
+		{% for task in tasks %}
+		<li class="task-card" data-animate style="--delay: {{ forloop.counter0 }};">
+			<div class="task-card-top">
+				<h2>{{ task.titulo|default:task.title|default:"Tarea sin titulo" }}</h2>
+				{% if task.completada|default:task.completed %}
+				<span class="status status-done">Completada</span>
+				{% else %}
+				<span class="status status-pending">Pendiente</span>
+				{% endif %}
+			</div>
+
+			<p class="task-desc">
+				{{ task.descripcion|default:task.description|default:"Sin descripcion disponible." }}
+			</p>
+
+			<div class="task-meta">
+				{% if task.fecha_creacion %}
+				<p>Creada: {{ task.fecha_creacion|date:"d/m/Y H:i" }}</p>
+				{% endif %}
+				{% if task.fecha_vencimiento %}
+				<p>Vence: {{ task.fecha_vencimiento|date:"d/m/Y H:i" }}</p>
+				{% endif %}
+				{% if task.created_at %}
+				<p>Creada: {{ task.created_at|date:"d/m/Y H:i" }}</p>
+				{% endif %}
+				{% if task.due_date %}
+				<p>Vence: {{ task.due_date|date:"d/m/Y H:i" }}</p>
+				{% endif %}
+			</div>
+		</li>
+		{% endfor %}
+	</ul>
+	{% else %}
+	<div class="empty-state" data-empty-state data-animate>
+		<div class="empty-icon" aria-hidden="true">○</div>
+		<h2>No hay tareas por ahora</h2>
+		<p>Cuando añadas una nueva tarea, aparecera aqui con su estado y fechas clave.</p>
+	</div>
+	{% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/task_list.js' %}"></script>
+{% endblock %}

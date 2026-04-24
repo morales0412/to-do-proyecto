@@ -5,5 +5,5 @@ from to_do_app.views import TaskListView, TaskDetailView
 
 urlpatterns = [
     path("", TaskListView.as_view(), name="task_list"),
-    path("/<int:pk>/", TaskDetailView.as_view(), name="task_detail"),
+    path("<int:pk>/", TaskDetailView.as_view(), name="task_detail"),
 ]
