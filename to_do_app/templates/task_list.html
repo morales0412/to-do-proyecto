@@ -10,6 +10,32 @@
 		<p class="eyebrow">Panel de tareas</p>
 		<h1>Tu lista de pendientes</h1>
 		<p class="panel-subtitle">Mantiene el foco en lo importante y avanza paso a paso.</p>
+		<div class="panel-actions">
+			<button type="button" class="cta-button" data-create-toggle aria-expanded="false">
+				+ Nueva tarea
+			</button>
+		</div>
+	</div>
+
+	<div class="create-task-shell" data-create-panel hidden>
+		<form class="task-form" method="post" action="{% url 'task_create' %}">
+			{% csrf_token %}
+			<div class="task-form-header">
+				<div>
+					<p class="eyebrow">Formulario rápido</p>
+					<h2>Crear una tarea</h2>
+				</div>
+				<button type="button" class="text-button" data-create-close>Cerrar</button>
+			</div>
+
+			{% if form.errors %}
+			<div class="form-errors" role="alert">
+				<p>Revisa los campos marcados antes de guardar.</p>
+			</div>
+			{% endif %}
+
+			{% include "includes/task_form_fields.html" %}
+		</form>
 	</div>
 
 	{% if tasks %}
@@ -17,8 +43,8 @@
 		{% for task in tasks %}
 		<li class="task-card" data-animate style="--delay: {{ forloop.counter0 }};">
 			<div class="task-card-top">
-				<h2>{{ task.titulo|default:task.title|default:"Tarea sin titulo" }}</h2>
-				{% if task.completada|default:task.completed %}
+				<h2>{{ task.titulo|default:"Tarea sin titulo" }}</h2>
+				{% if task.completada %}
 				<span class="status status-done">Completada</span>
 				{% else %}
 				<span class="status status-pending">Pendiente</span>
@@ -26,7 +52,7 @@
 			</div>
 
 			<p class="task-desc">
-				{{ task.descripcion|default:task.description|default:"Sin descripcion disponible." }}
+				{{ task.descripcion|default:"Sin descripcion disponible." }}
 			</p>
 
 			<div class="task-meta">
@@ -35,12 +61,6 @@
 				{% endif %}
 				{% if task.fecha_vencimiento %}
 				<p>Vence: {{ task.fecha_vencimiento|date:"d/m/Y H:i" }}</p>
-				{% endif %}
-				{% if task.created_at %}
-				<p>Creada: {{ task.created_at|date:"d/m/Y H:i" }}</p>
-				{% endif %}
-				{% if task.due_date %}
-				<p>Vence: {{ task.due_date|date:"d/m/Y H:i" }}</p>
 				{% endif %}
 			</div>
 		</li>

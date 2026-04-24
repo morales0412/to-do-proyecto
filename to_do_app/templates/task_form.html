@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Crear tarea | To-Do Sprint{% endblock %}
+
+{% block content %}
+<section class="todo-panel" data-animate>
+	<div class="panel-header">
+		<p class="eyebrow">Nueva tarea</p>
+		<h1>Crea un nuevo pendiente</h1>
+		<p class="panel-subtitle">Completa los campos y guarda la tarea para verla en tu lista principal.</p>
+	</div>
+
+	<form class="task-form task-form-page" method="post" action="{% url 'task_create' %}">
+		{% csrf_token %}
+
+		{% if form.errors %}
+		<div class="form-errors" role="alert">
+			<p>Revisa los campos marcados antes de guardar.</p>
+		</div>
+		{% endif %}
+
+		{% include "includes/task_form_fields.html" %}
+	</form>
+</section>
+{% endblock %}
