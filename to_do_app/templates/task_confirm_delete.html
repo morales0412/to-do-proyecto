@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Eliminar tarea | To-Do Sprint{% endblock %}
+
+{% block content %}
+<section class="todo-panel" data-animate>
+	<div class="panel-header">
+		<p class="eyebrow">Eliminar tarea</p>
+		<h1>Confirmar eliminación</h1>
+		<p class="panel-subtitle">Esta acción no se puede deshacer.</p>
+	</div>
+
+	<div class="delete-card">
+		<h2>{{ object.titulo }}</h2>
+		<p>{{ object.descripcion|default:"Sin descripcion disponible." }}</p>
+
+		<form method="post" class="delete-actions">
+			{% csrf_token %}
+			<a class="secondary-action" href="{% url 'task_list' %}">Cancelar</a>
+			<button type="submit" class="danger-button">Eliminar tarea</button>
+		</form>
+	</div>
+</section>
+{% endblock %}

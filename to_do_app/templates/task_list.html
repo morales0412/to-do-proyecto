@@ -11,31 +11,10 @@
 		<h1>Tu lista de pendientes</h1>
 		<p class="panel-subtitle">Mantiene el foco en lo importante y avanza paso a paso.</p>
 		<div class="panel-actions">
-			<button type="button" class="cta-button" data-create-toggle aria-expanded="false">
+			<a class="cta-button" href="{% url 'task_create' %}">
 				+ Nueva tarea
-			</button>
+			</a>
 		</div>
-	</div>
-
-	<div class="create-task-shell" data-create-panel hidden>
-		<form class="task-form" method="post" action="{% url 'task_create' %}">
-			{% csrf_token %}
-			<div class="task-form-header">
-				<div>
-					<p class="eyebrow">Formulario rápido</p>
-					<h2>Crear una tarea</h2>
-				</div>
-				<button type="button" class="text-button" data-create-close>Cerrar</button>
-			</div>
-
-			{% if form.errors %}
-			<div class="form-errors" role="alert">
-				<p>Revisa los campos marcados antes de guardar.</p>
-			</div>
-			{% endif %}
-
-			{% include "includes/task_form_fields.html" %}
-		</form>
 	</div>
 
 	{% if tasks %}
@@ -62,6 +41,11 @@
 				{% if task.fecha_vencimiento %}
 				<p>Vence: {{ task.fecha_vencimiento|date:"d/m/Y H:i" }}</p>
 				{% endif %}
+			</div>
+
+			<div class="task-card-actions">
+				<a class="secondary-action" href="{% url 'task_update' task.pk %}">Editar</a>
+				<a class="danger-action" href="{% url 'task_delete' task.pk %}">Eliminar</a>
 			</div>
 		</li>
 		{% endfor %}

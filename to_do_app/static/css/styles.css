@@ -80,15 +80,6 @@ p {
     margin-top: 1rem;
 }
 
-.create-task-shell {
-    margin-top: 1.2rem;
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    background: rgba(255, 253, 248, 0.9);
-    border: 1px solid rgba(222, 214, 200, 0.9);
-    box-shadow: var(--shadow-card);
-}
-
 .task-form {
     display: grid;
     gap: 0.95rem;
@@ -149,6 +140,13 @@ p {
     line-height: 1.4;
 }
 
+.task-card-actions,
+.delete-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+}
+
 .form-actions {
     display: flex;
     justify-content: space-between;
@@ -184,18 +182,54 @@ p {
     padding: 0.78rem 1.1rem;
 }
 
+.danger-action,
+.danger-button {
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    background: rgba(212, 92, 79, 0.12);
+    color: var(--danger);
+    padding: 0.78rem 1.1rem;
+}
+
 .text-button {
     padding-inline: 0.95rem;
 }
 
 .cta-button:hover,
 .secondary-action:hover,
-.text-button:hover {
+.text-button:hover,
+.danger-action:hover,
+.danger-button:hover {
     transform: translateY(-1px);
 }
 
 .task-form-page {
     margin-top: 1.1rem;
+}
+
+.delete-card {
+    margin-top: 1.1rem;
+    background: rgba(255, 253, 248, 0.92);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    padding: 1rem;
+    display: grid;
+    gap: 0.8rem;
+}
+
+.delete-card h2 {
+    font-family: "Fraunces", serif;
+    font-size: 1.35rem;
+}
+
+.delete-card p {
+    color: var(--muted);
+    line-height: 1.5;
 }
 
 .task-form input[type="datetime-local"] {
@@ -407,7 +441,11 @@ p {
 
     .task-form-header .text-button,
     .form-actions .cta-button,
-    .form-actions .secondary-action {
+    .form-actions .secondary-action,
+    .task-card-actions .secondary-action,
+    .task-card-actions .danger-action,
+    .delete-actions .secondary-action,
+    .delete-actions .danger-button {
         width: 100%;
         text-align: center;
     }
