@@ -1,7 +1,9 @@
 from django.db import models
+from usuarios.models import User
 
 
 class Tarea(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     titulo = models.CharField(max_length=200)
     descripcion = models.TextField()
     fecha_creacion = models.DateTimeField(auto_now_add=True)

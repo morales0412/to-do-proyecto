@@ -8,6 +8,7 @@ from to_do_app.views import (
     TaskUpdateView,
 )
 
+app_name = "to_do_app"
 
 urlpatterns = [
     path("", TaskListView.as_view(), name="task_list"),
