@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Iniciar sesión | To-Do Sprint{% endblock %}
+
+{% block content %}
+<section class="todo-panel" data-animate>
+	<div class="panel-header">
+		<p class="eyebrow">Iniciar sesión</p>
+		<h1>Bienvenido de vuelta</h1>
+		<p class="panel-subtitle">Accede a tu cuenta para ver tus tareas.</p>
+	</div>
+
+	<form class="task-form task-form-page" method="post">
+		{% csrf_token %}
+
+		{% if form.non_field_errors %}
+		<div class="form-errors" role="alert">
+			<p>{{ form.non_field_errors }}</p>
+		</div>
+		{% endif %}
+
+		<div class="field-group">
+			<label for="id_username">Usuario</label>
+			{{ form.username }}
+			{% if form.username.errors %}
+			<div class="field-errors">
+				{{ form.username.errors }}
+			</div>
+			{% endif %}
+		</div>
+
+		<div class="field-group">
+			<label for="id_password">Contraseña</label>
+			{{ form.password }}
+			{% if form.password.errors %}
+			<div class="field-errors">
+				{{ form.password.errors }}
+			</div>
+			{% endif %}
+		</div>
+
+		<div class="form-actions">
+			<a class="secondary-action" href="{% url 'usuarios:registro' %}">¿No tienes cuenta? Regístrate</a>
+			<button type="submit" class="cta-button">Iniciar sesión</button>
+		</div>
+	</form>
+</section>
+{% endblock %}

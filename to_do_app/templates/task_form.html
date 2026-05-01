@@ -10,7 +10,7 @@
 		<p class="panel-subtitle">Completa los campos y guarda la tarea para verla en tu lista principal.</p>
 	</div>
 
-	<form class="task-form task-form-page" method="post" action="{% url 'task_create' %}">
+	<form class="task-form task-form-page" method="post">
 		{% csrf_token %}
 
 		{% if form.errors %}
@@ -50,7 +50,7 @@
 		</div>
 
 		<div class="form-actions">
-			<a class="secondary-action" href="{% url 'task_list' %}">Volver a la lista</a>
+			<a class="secondary-action" href="{% url 'to_do_app:task_list' %}">Volver a la lista</a>
 			<button type="submit" class="cta-button">Guardar tarea</button>
 		</div>
 	</form>

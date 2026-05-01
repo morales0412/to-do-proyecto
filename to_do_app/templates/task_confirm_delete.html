@@ -16,7 +16,7 @@
 
 		<form method="post" class="delete-actions">
 			{% csrf_token %}
-			<a class="secondary-action" href="{% url 'task_list' %}">Cancelar</a>
+			<a class="secondary-action" href="{% url 'to_do_app:task_list' %}">Cancelar</a>
 			<button type="submit" class="danger-button">Eliminar tarea</button>
 		</form>
 	</div>

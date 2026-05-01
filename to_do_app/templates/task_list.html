@@ -11,7 +11,7 @@
 		<h1>Tu lista de pendientes</h1>
 		<p class="panel-subtitle">Mantiene el foco en lo importante y avanza paso a paso.</p>
 		<div class="panel-actions">
-			<a class="cta-button" href="{% url 'task_create' %}">
+			<a class="cta-button" href="{% url 'to_do_app:task_create' %}">
 				+ Nueva tarea
 			</a>
 		</div>
@@ -44,8 +44,8 @@
 			</div>
 
 			<div class="task-card-actions">
-				<a class="secondary-action" href="{% url 'task_update' task.pk %}">Editar</a>
-				<a class="danger-action" href="{% url 'task_delete' task.pk %}">Eliminar</a>
+				<a class="secondary-action" href="{% url 'to_do_app:task_update' task.pk %}">Editar</a>
+				<a class="danger-action" href="{% url 'to_do_app:task_delete' task.pk %}">Eliminar</a>
 			</div>
 		</li>
 		{% endfor %}
@@ -61,5 +61,5 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/task_list.js' %}"></script>
+<script src="{% static 'task/js/task_list.js' %}"></script>
 {% endblock %}
