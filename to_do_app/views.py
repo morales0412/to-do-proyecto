@@ -1,10 +1,13 @@
-from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.views import View
 from django.views.generic import (
     CreateView,
     DeleteView,
+    DetailView,
     ListView,
     UpdateView,
-    DetailView,
 )
 
 from to_do_app.forms import TareaForm
@@ -18,7 +21,20 @@ class TaskListView(LoginRequiredMixin, ListView):
     context_object_name = "tasks"
 
     def get_queryset(self):
-        return Tarea.objects.filter(usuario=self.request.user)
+        return Tarea.objects.filter(usuario=self.request.user).order_by(
+            "completada", "-fecha_creacion"
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        qs = self.get_queryset()
+        total = qs.count()
+        completed = qs.filter(completada=True).count()
+        ctx["total"] = total
+        ctx["completed"] = completed
+        ctx["pending"] = total - completed
+        ctx["completion_pct"] = int(completed / total * 100) if total else 0
+        return ctx
 
 
 class TaskDetailView(LoginRequiredMixin, DetailView):
@@ -44,7 +60,7 @@ class TaskCreateView(LoginRequiredMixin, CreateView):
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     model = Tarea
     form_class = TareaForm
-    template_name = "task_form.html"
+    template_name = "task_update.html"
     success_url = reverse_lazy("to_do_app:task_list")
 
     def get_queryset(self):
@@ -58,3 +74,11 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Tarea.objects.filter(usuario=self.request.user)
+
+
+class TaskToggleView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        tarea = get_object_or_404(Tarea, pk=pk, usuario=request.user)
+        tarea.completada = not tarea.completada
+        tarea.save()
+        return HttpResponseRedirect(reverse("to_do_app:task_list"))

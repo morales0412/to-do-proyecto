@@ -1,65 +1,105 @@
 {% extends "base.html" %}
 {% load static %}
 
-
-{% block title %}Lista de tareas | To-Do Sprint{% endblock %}
+{% block title %}Mis tareas | To-Do Sprint{% endblock %}
 
 {% block content %}
 <section class="todo-panel" data-animate>
-	<div class="panel-header">
-		<p class="eyebrow">Panel de tareas</p>
-		<h1>Tu lista de pendientes</h1>
-		<p class="panel-subtitle">Mantiene el foco en lo importante y avanza paso a paso.</p>
-		<div class="panel-actions">
-			<a class="cta-button" href="{% url 'to_do_app:task_create' %}">
-				+ Nueva tarea
-			</a>
-		</div>
-	</div>
+    <div class="panel-header">
+        <p class="eyebrow">Panel de tareas</p>
+        <h1>Tu lista de pendientes</h1>
+        <p class="panel-subtitle">Mantén el foco en lo importante y avanza paso a paso.</p>
+    </div>
 
-	{% if tasks %}
-	<ul class="task-grid" aria-label="Lista de tareas">
-		{% for task in tasks %}
-		<li class="task-card" data-animate style="--delay: {{ forloop.counter0 }};">
-			<div class="task-card-top">
-				<h2>{{ task.titulo|default:"Tarea sin titulo" }}</h2>
-				{% if task.completada %}
-				<span class="status status-done">Completada</span>
-				{% else %}
-				<span class="status status-pending">Pendiente</span>
-				{% endif %}
-			</div>
+    <div class="panel-meta">
+        <div class="stats-row">
+            <span class="stat-chip stat-chip-total">
+                <span class="stat-num">{{ total }}</span> Total
+            </span>
+            <span class="stat-chip stat-chip-done">
+                <span class="stat-num">{{ completed }}</span> Completadas
+            </span>
+            <span class="stat-chip stat-chip-pending">
+                <span class="stat-num">{{ pending }}</span> Pendientes
+            </span>
+        </div>
+        {% if total > 0 %}
+        <div class="progress-wrap">
+            <div class="progress-track">
+                <div class="progress-fill" style="width: {{ completion_pct }}%;"></div>
+            </div>
+            <span class="progress-label">{{ completion_pct }}%</span>
+        </div>
+        {% endif %}
+    </div>
 
-			<p class="task-desc">
-				{{ task.descripcion|default:"Sin descripcion disponible." }}
-			</p>
+    <div class="panel-actions">
+        <a class="cta-button" href="{% url 'to_do_app:task_create' %}">+ Nueva tarea</a>
+    </div>
 
-			<div class="task-meta">
-				{% if task.fecha_creacion %}
-				<p>Creada: {{ task.fecha_creacion|date:"d/m/Y H:i" }}</p>
-				{% endif %}
-				{% if task.fecha_vencimiento %}
-				<p>Vence: {{ task.fecha_vencimiento|date:"d/m/Y H:i" }}</p>
-				{% endif %}
-			</div>
+    {% if tasks %}
+    <ul class="task-grid" aria-label="Lista de tareas">
+        {% for task in tasks %}
+        <li class="task-card {% if task.completada %}is-done{% endif %} {% if task.is_overdue %}is-overdue{% endif %}"
+            data-animate
+            style="--delay: {{ forloop.counter0 }};">
 
-			<div class="task-card-actions">
-				<a class="secondary-action" href="{% url 'to_do_app:task_update' task.pk %}">Editar</a>
-				<a class="danger-action" href="{% url 'to_do_app:task_delete' task.pk %}">Eliminar</a>
-			</div>
-		</li>
-		{% endfor %}
-	</ul>
-	{% else %}
-	<div class="empty-state" data-empty-state data-animate>
-		<div class="empty-icon" aria-hidden="true">○</div>
-		<h2>No hay tareas por ahora</h2>
-		<p>Cuando añadas una nueva tarea, aparecera aqui con su estado y fechas clave.</p>
-	</div>
-	{% endif %}
+            {% if task.is_overdue %}
+            <div class="overdue-badge">⚠ Vencida</div>
+            {% endif %}
+
+            <div class="task-card-top">
+                <form class="toggle-form" method="post" action="{% url 'to_do_app:task_toggle' task.pk %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="toggle-btn {% if task.completada %}is-checked{% endif %}"
+                            title="{% if task.completada %}Marcar como pendiente{% else %}Marcar como completada{% endif %}"
+                            aria-label="{% if task.completada %}Marcar como pendiente{% else %}Marcar como completada{% endif %}">
+                        {% if task.completada %}✓{% endif %}
+                    </button>
+                </form>
+                <div class="task-card-title">
+                    <h2><span class="task-title-text">{{ task.titulo|default:"Tarea sin título" }}</span></h2>
+                </div>
+                {% if task.completada %}
+                <span class="status status-done">Completada</span>
+                {% else %}
+                <span class="status status-pending">Pendiente</span>
+                {% endif %}
+            </div>
+
+            <p class="task-desc">{{ task.descripcion|default:"Sin descripción disponible." }}</p>
+
+            <div class="task-footer">
+                <div class="task-meta">
+                    {% if task.fecha_creacion %}
+                    <span>Creada: {{ task.fecha_creacion|date:"d/m/Y" }}</span>
+                    {% endif %}
+                    {% if task.fecha_vencimiento %}
+                    <span>Vence: {{ task.fecha_vencimiento|date:"d/m/Y H:i" }}</span>
+                    {% endif %}
+                </div>
+                <div class="task-card-actions">
+                    <a class="icon-btn"
+                       href="{% url 'to_do_app:task_update' task.pk %}"
+                       title="Editar tarea"
+                       aria-label="Editar tarea">✎</a>
+                    <a class="icon-btn icon-btn-danger"
+                       href="{% url 'to_do_app:task_delete' task.pk %}"
+                       title="Eliminar tarea"
+                       aria-label="Eliminar tarea">✕</a>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty-state" data-empty-state data-animate>
+        <div class="empty-icon" aria-hidden="true">○</div>
+        <h2>No hay tareas por ahora</h2>
+        <p>Cuando añadas una nueva tarea, aparecerá aquí con su estado y fechas clave.</p>
+        <a class="cta-button" href="{% url 'to_do_app:task_create' %}">Crear primera tarea</a>
+    </div>
+    {% endif %}
 </section>
-{% endblock %}
-
-{% block extra_js %}
-<script src="{% static 'task/js/task_list.js' %}"></script>
 {% endblock %}

@@ -4,21 +4,21 @@
 
 {% block content %}
 <section class="todo-panel" data-animate>
-	<div class="panel-header">
-		<p class="eyebrow">Eliminar tarea</p>
-		<h1>Confirmar eliminación</h1>
-		<p class="panel-subtitle">Esta acción no se puede deshacer.</p>
-	</div>
+    <div class="panel-header">
+        <p class="eyebrow">Zona de riesgo</p>
+        <h1>Eliminar tarea</h1>
+        <p class="panel-subtitle">Esta acción es permanente y no se puede deshacer.</p>
+    </div>
 
-	<div class="delete-card">
-		<h2>{{ object.titulo }}</h2>
-		<p>{{ object.descripcion|default:"Sin descripcion disponible." }}</p>
+    <div class="delete-card">
+        <h2>{{ object.titulo }}</h2>
+        <p>{{ object.descripcion|default:"Sin descripción disponible." }}</p>
 
-		<form method="post" class="delete-actions">
-			{% csrf_token %}
-			<a class="secondary-action" href="{% url 'to_do_app:task_list' %}">Cancelar</a>
-			<button type="submit" class="danger-button">Eliminar tarea</button>
-		</form>
-	</div>
+        <form method="post" class="delete-actions">
+            {% csrf_token %}
+            <a class="secondary-action" href="{% url 'to_do_app:task_list' %}">← Cancelar</a>
+            <button type="submit" class="danger-button">Eliminar definitivamente</button>
+        </form>
+    </div>
 </section>
 {% endblock %}

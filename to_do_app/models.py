@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from usuarios.models import User
 
 
@@ -12,3 +13,11 @@ class Tarea(models.Model):
 
     def __str__(self):
         return self.titulo
+
+    @property
+    def is_overdue(self):
+        return (
+            not self.completada
+            and self.fecha_vencimiento is not None
+            and self.fecha_vencimiento < timezone.now()
+        )

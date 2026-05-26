@@ -1,58 +1,55 @@
 {% extends "base.html" %}
 
-{% block title %}Actualizar tarea | To-Do Sprint{% endblock %}
+{% block title %}Editar tarea | To-Do Sprint{% endblock %}
 
 {% block content %}
 <section class="todo-panel" data-animate>
-	<div class="panel-header">
-		<p class="eyebrow">Editar tarea</p>
-		<h1>Actualiza tu pendiente</h1>
-		<p class="panel-subtitle">Corrige los datos de la tarea y guarda los cambios.</p>
-	</div>
+    <div class="panel-header">
+        <p class="eyebrow">Editar tarea</p>
+        <h1>Actualizar pendiente</h1>
+        <p class="panel-subtitle">Modifica los datos de la tarea y guarda los cambios.</p>
+    </div>
 
-	<form class="task-form task-form-page" method="post">
-		{% csrf_token %}
+    <form class="task-form" method="post">
+        {% csrf_token %}
 
-		{% if form.errors %}
-		<div class="form-errors" role="alert">
-			<p>Revisa los campos marcados antes de guardar.</p>
-		</div>
-		{% endif %}
+        {% if form.errors %}
+        <div class="form-errors" role="alert">
+            Revisa los campos marcados antes de guardar.
+        </div>
+        {% endif %}
 
-		<div class="field-group">
-			<label for="id_titulo">Titulo</label>
-			{{ form.titulo }}
-			{% if form.titulo.errors %}
-			<div class="field-errors">
-				{{ form.titulo.errors }}
-			</div>
-			{% endif %}
-		</div>
+        <div class="field-group">
+            <label for="id_titulo">Título</label>
+            {{ form.titulo }}
+            {% if form.titulo.errors %}
+            <div class="field-errors">{{ form.titulo.errors }}</div>
+            {% endif %}
+        </div>
 
-		<div class="field-group">
-			<label for="id_descripcion">Descripcion</label>
-			{{ form.descripcion }}
-			{% if form.descripcion.errors %}
-			<div class="field-errors">
-				{{ form.descripcion.errors }}
-			</div>
-			{% endif %}
-		</div>
+        <div class="field-group">
+            <label for="id_descripcion">Descripción</label>
+            {{ form.descripcion }}
+            {% if form.descripcion.errors %}
+            <div class="field-errors">{{ form.descripcion.errors }}</div>
+            {% endif %}
+        </div>
 
-		<div class="field-group">
-			<label for="id_fecha_vencimiento">Fecha de vencimiento</label>
-			{{ form.fecha_vencimiento }}
-			{% if form.fecha_vencimiento.errors %}
-			<div class="field-errors">
-				{{ form.fecha_vencimiento.errors }}
-			</div>
-			{% endif %}
-		</div>
+        <div class="field-group">
+            <label for="id_fecha_vencimiento">
+                Fecha de vencimiento
+                <span style="font-weight: 400; color: var(--muted);">(opcional)</span>
+            </label>
+            {{ form.fecha_vencimiento }}
+            {% if form.fecha_vencimiento.errors %}
+            <div class="field-errors">{{ form.fecha_vencimiento.errors }}</div>
+            {% endif %}
+        </div>
 
-		<div class="form-actions">
-			<a class="secondary-action" href="{% url 'to_do_app:task_list' %}">Volver a la lista</a>
-			<button type="submit" class="cta-button">Guardar cambios</button>
-		</div>
-	</form>
+        <div class="form-actions">
+            <a class="secondary-action" href="{% url 'to_do_app:task_list' %}">← Volver</a>
+            <button type="submit" class="cta-button">Guardar cambios</button>
+        </div>
+    </form>
 </section>
 {% endblock %}
